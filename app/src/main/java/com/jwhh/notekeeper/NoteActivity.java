@@ -3,6 +3,7 @@ package com.jwhh.notekeeper;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
@@ -38,6 +39,11 @@ public class NoteActivity extends AppCompatActivity {
         ViewModelProvider viewModelProvider = new ViewModelProvider(getViewModelStore(),
                 ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()));
         mNoteActivityViewModel = viewModelProvider.get(NoteActivityViewModel.class);
+
+        if (mNoteActivityViewModel.mIsNewlyCreated && savedInstanceState != null)
+            mNoteActivityViewModel.restoreState(savedInstanceState);
+
+        mNoteActivityViewModel.mIsNewlyCreated = false;
 
         mCoursesSpinner = findViewById(R.id.spinner_courses);
         List<CourseInfo> courses = DataManager.getInstance().getCourses();
@@ -113,6 +119,13 @@ public class NoteActivity extends AppCompatActivity {
         DataManager dm = DataManager.getInstance();
         mNotePosition = dm.createNewNote();
         mNote = dm.getNotes().get(mNotePosition);
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (outState != null);
+        mNoteActivityViewModel.saveState(outState);
     }
 
     @Override
