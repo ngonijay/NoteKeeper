@@ -72,13 +72,13 @@ public class NoteActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if (mIsCancelling){
+        if (mIsCancelling) {
             if (mIsNewNote)
-           DataManager.getInstance().removeNote(mNotePosition);
+                DataManager.getInstance().removeNote(mNotePosition);
             else {
                 storePreviousNoteValues();
             }
-        }else {
+        } else {
             saveNote();
         }
     }
@@ -106,25 +106,25 @@ public class NoteActivity extends AppCompatActivity {
 
     private void readDisplayStateValues() {
         Intent intent = getIntent();
-        int position = intent.getIntExtra(NOTE_POSITION, POSITION_NOT_SET);
-        mIsNewNote = position == POSITION_NOT_SET;
+        mNotePosition = intent.getIntExtra(NOTE_POSITION, POSITION_NOT_SET);
+        mIsNewNote = mNotePosition == POSITION_NOT_SET;
         if (mIsNewNote) {
             createNewNote();
-        } else {
-            mNote = DataManager.getInstance().getNotes().get(position);
         }
+        mNote = DataManager.getInstance().getNotes().get(mNotePosition);
     }
+
 
     private void createNewNote() {
         DataManager dm = DataManager.getInstance();
         mNotePosition = dm.createNewNote();
-        mNote = dm.getNotes().get(mNotePosition);
+        //mNote = dm.getNotes().get(mNotePosition);
     }
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (outState != null);
+        if (outState != null) ;
         mNoteActivityViewModel.saveState(outState);
     }
 
