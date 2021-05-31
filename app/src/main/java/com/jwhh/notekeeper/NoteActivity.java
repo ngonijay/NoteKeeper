@@ -8,15 +8,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.jwhh.notekeeper.auth.AuthenticationActivity;
+
 import java.util.List;
 
 public class NoteActivity extends AppCompatActivity {
+
+    public  final String TAG = getClass().getSimpleName();
     public static final String NOTE_POSITION = "com.jwhh.notekeeper_NOTE_POSITION";
     public static final int POSITION_NOT_SET = -1;
     private NoteInfo mNote;
@@ -59,6 +64,8 @@ public class NoteActivity extends AppCompatActivity {
         mTextNoteText = findViewById(R.id.text_note_text);
         if (!mIsNewNote)
             displayNote(mCoursesSpinner, mTextNoteTitle, mTextNoteText);
+
+        Log.d(TAG, "onCreate");
     }
 
     private void saveOriginalNoteValues() {
@@ -73,6 +80,7 @@ public class NoteActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         if (mIsCancelling) {
+            Log.i(TAG, "Cancelling Note at position: "+ mNotePosition);
             if (mIsNewNote)
                 DataManager.getInstance().removeNote(mNotePosition);
             else {
@@ -81,6 +89,7 @@ public class NoteActivity extends AppCompatActivity {
         } else {
             saveNote();
         }
+        Log.d(TAG, "onPause");
     }
 
     private void storePreviousNoteValues() {
@@ -111,6 +120,7 @@ public class NoteActivity extends AppCompatActivity {
         if (mIsNewNote) {
             createNewNote();
         }
+        Log.i(TAG, "mNotePosition: "+ mNotePosition);
         mNote = DataManager.getInstance().getNotes().get(mNotePosition);
     }
 
@@ -149,6 +159,9 @@ public class NoteActivity extends AppCompatActivity {
         } else if (id == R.id.action_cancel) {
             mIsCancelling = true;
             finish();
+        }else if (id == R.id.cloud_back_up) {
+            //Todo add is logged in condition check and if logged in or registered save note else register
+           startActivity(new Intent(NoteActivity.this, AuthenticationActivity.class));
         }
 
         return super.onOptionsItemSelected(item);

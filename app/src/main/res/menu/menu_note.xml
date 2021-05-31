@@ -11,4 +11,8 @@
         android:id="@+id/action_cancel"
         android:orderInCategory="101"
         android:title="@android:string/cancel" />
+    <item
+        android:id="@+id/cloud_back_up"
+        android:orderInCategory="102"
+        android:title="Cloud backup" />
 </menu>
